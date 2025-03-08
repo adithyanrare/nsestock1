@@ -1,5 +1,4 @@
 import yfinance as yf
-import talib
 import csv
 import numpy as np
 from nsepython import *
@@ -13,6 +12,26 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
+import os
+import subprocess
+
+# Check if ta-lib is installed, if not, install it from source
+try:
+    import talib
+except ImportError:
+    # Install ta-lib manually
+    subprocess.run(["wget", "http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz"])
+    subprocess.run(["tar", "-xvzf", "ta-lib-0.4.0-src.tar.gz"])
+    os.chdir("ta-lib-0.4.0")
+    subprocess.run(["./configure", "--prefix=/usr"])
+    subprocess.run(["make"])
+    subprocess.run(["make", "install"])
+    os.chdir("..")
+    subprocess.run(["pip", "install", "ta-lib"])
+    import talib  # Try importing again
+
+import streamlit as st
+st.write("ta-lib successfully installed!")
 
 # Suppress FutureWarning messages
 warnings.simplefilter(action='ignore', category=FutureWarning)
