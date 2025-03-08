@@ -2,5 +2,4 @@ streamlit
 yfinance
 numpy
 pandas
-ta-lib
 nsepython
